@@ -53,15 +53,18 @@ struct token_t{
     char lexeme[11];
 };
 
+
 //code array to read to, and token array
 char rawCode[10000] = "";
 struct token_t tokenArray[100];
 
+
 //functions
 void loadProgramFromFile();
+char* outputClean();
 void analyzeCode();
 void printCode();
-char* outputClean();
+
 
 // this should be about how the code is executed
 int main() {
@@ -107,6 +110,72 @@ void loadProgramFromFile() {
         }
     }
 }
+
+
+// Outputs text file with comments removed and returns the character array holding the code also cleaned
+char* outputClean() {
+    
+    // The returned array, containing the cleaned code
+    char cleaned[strlen(rawCode)];
+    
+    char currentChar = ' ';
+    int i = 0;
+    
+    while (i < strlen(rawCode)) {
+        
+        currentChar = rawCode[i];
+        
+        switch (currentChar) {
+            
+            // Case for when the forward slash is encountered
+            case '/':
+                
+                // Check to see if the next charcter is the *, with no whitespace in between, which will mean a comment has been found
+                if (rawCode[i + 1] == '*') {
+                    
+                    // A comment was found, now we need to find where it stops and change i so that the comment isn't transferred to the cleaned array
+                    // Set i to the first character of the comment
+                    i += 2;
+                    
+                    // Use a nested switch statement, just like the enclosing one except for finding the end comment notation
+                    while (i < strlen(rawCode)) {
+                        
+                        currentChar = rawCode[i];
+                        
+                        switch (currentChar) {
+                            
+                            case '*':
+                                
+                                if (rawCode[i + 1] == '/') {
+                                    break;
+                                }
+                                i++;
+                                break;
+                                
+                            default:
+                                i++;
+                                break;
+                        }
+                        
+                        
+                    }
+                    
+                }
+                i++;
+                break;
+            
+            // The default case will simply transfer the characters to the cleaned array
+            default:
+                cleaned[i] = rawCode[i];
+                i++;
+                break;
+        }
+    }
+    
+    
+    return cleaned;
+}
+
 
 // J: Should add a helper funtion, called within here, that will print the clean output to file, when appropriate
 //need to add more cases
@@ -171,13 +240,6 @@ void analyzeCode(){
 
 void processcode(){
     
-}
-
-
-// Outputs text file with comments removed and returns the character array holding the code also cleaned
-char* outputClean() {
-    
-    return NULL;
 }
 
 
