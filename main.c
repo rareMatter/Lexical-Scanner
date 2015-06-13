@@ -61,11 +61,14 @@ struct token_t tokenArray[100];
 void loadProgramFromFile();
 void analyzeCode();
 void printCode();
+char* outputClean();
 
 // this should be about how the code is executed
 int main() {
     
     loadProgramFromFile();
+    
+    outputClean();
     
     analyzeCode();
     
@@ -77,22 +80,24 @@ int main() {
 
 //should work and read in file
 void loadProgramFromFile() {
-    FILE *programFile = fopen("input.txt", "r");
+    
+    FILE* programFile = fopen("input.txt", "r");
+    
     //check to see the file has loaded
-    if (programFile==NULL) {
+    if (programFile == NULL) {
         printf("uhoh ");
         exit(1);
     }
     
-    else if(programFile){        // If file exists
-        // Reads in information from file and stores in CODE structure array, assumes that the input file is properly formatted
-        int rawCode;     // <--- holds code
+    else {        // If file exists
+        
+        // Reads in information from file and stores in CODE structure array
+        char currentCharacter;     // <--- holds code
         int i = 0;      //  <--- Counter
         //   This while loop reads in raw code from a text file and adds it onto the code array, it ends when
         //    it reaches the end of the file
-        while (fscanf(programFile, "%d", &rawCode)!= EOF)
-        {
-            code[i] = rawCode;
+        while (fscanf(programFile, "%s", &currentCharacter) != EOF) {
+            code[i] = currentCharacter;
             i++;
         }
     }
@@ -110,10 +115,10 @@ void analyzeCode(){
     int tokenIndex = 0;
     
     //loop to read in code
-    while (index<strlen(code)) {
+    while (index < strlen(code)) {
         
         //getting code from index
-        char ch= code[index];
+        char ch = code[index];
         
         //switch function to create tokens from code array
         switch(ch) {
@@ -121,10 +126,10 @@ void analyzeCode(){
             // if ch is == i, then it could be an if statement or a variable
             case 'i':
                 
-                state=2;
-                token.class=identsym;
-                token.lexeme[strlen(token.lexeme)]=ch;
-                last_index = index+1;
+                state = 2;
+                token.class = identsym;
+                token.lexeme[strlen(token.lexeme)] = ch;
+                last_index = index + 1;
                 
                 break;
                 
@@ -164,6 +169,10 @@ void processcode(){
 }
 
 
-
+// Outputs text file with comments removed and returns the character array holding the code also cleaned
+char* outputClean() {
+    
+    return void;
+}
 
 
