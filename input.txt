@@ -1,7 +1,7 @@
 const m = 7, n = 85;
 var i,x,y,z,q,r;
 procedure mult;
-    var a, b;
+    var a, b; /* This i*s n/ot a comment * */
     begin
         a := x; b := y; z := 0;
         while b > 0 do

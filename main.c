@@ -54,14 +54,22 @@ struct token_t{
 };
 
 
+#define TRUE 1
+#define FALSE 0
+
+
+static const int CODE_BUFFER = 10000;
+
+
 //code array to read to, and token array
-char rawCode[10000] = "";
+char rawCode[CODE_BUFFER] = "";
+char cleanCode[CODE_BUFFER] = "";
 struct token_t tokenArray[100];
 
 
 //functions
 void loadProgramFromFile();
-char* outputClean();
+void outputClean();
 void analyzeCode();
 void printCode();
 
@@ -72,12 +80,8 @@ int main() {
     
     loadProgramFromFile();
     
-    
-    // Array to hold cleaned code
-    char* cleanCode;
-    // Set clean code equal to the cleaned array, returned by outputClean()
-    cleanCode = outputClean();
-    
+    outputClean();
+        
     //analyzeCode();
     
     //printCode();
@@ -112,16 +116,15 @@ void loadProgramFromFile() {
 }
 
 
-// Outputs text file with comments removed and returns the character array holding the code also cleaned
-char* outputClean() {
+// Outputs text file with comments removed and transfers cleaned array to cleanCode
+void outputClean() {
     
-    // The returned array, containing the cleaned code
-    char cleaned[strlen(rawCode)];
     
     char currentChar = ' ';
     int i = 0;
     
-    while (i < strlen(rawCode)) {
+    // The minus one is needed here because the string terminating character was being inserted into the cleanCode array and causing issues
+    while (i < strlen(rawCode) - 1) {
         
         currentChar = rawCode[i];
         
@@ -136,9 +139,12 @@ char* outputClean() {
                     // A comment was found, now we need to find where it stops and change i so that the comment isn't transferred to the cleaned array
                     // Set i to the first character of the comment
                     i += 2;
-                    
+                    currentChar = rawCode[i];
                     // Use a nested switch statement, just like the enclosing one except for finding the end comment notation
-                    while (i < strlen(rawCode)) {
+                    
+                    int commentEndFound = FALSE;
+                    
+                    while (commentEndFound == FALSE) {
                         
                         currentChar = rawCode[i];
                         
@@ -147,8 +153,11 @@ char* outputClean() {
                             case '*':
                                 
                                 if (rawCode[i + 1] == '/') {
+                                    commentEndFound = TRUE;
+                                    i += 2;
                                     break;
                                 }
+                                
                                 i++;
                                 break;
                                 
@@ -156,28 +165,25 @@ char* outputClean() {
                                 i++;
                                 break;
                         }
-                        
-                        
                     }
-                    
                 }
+                
+                cleanCode[i] = rawCode[i];
                 i++;
                 break;
             
             // The default case will simply transfer the characters to the cleaned array
             default:
-                cleaned[i] = rawCode[i];
+                cleanCode[i] = rawCode[i];
                 i++;
                 break;
         }
     }
     
     
-    return cleaned;
 }
 
 
-// J: Should add a helper funtion, called within here, that will print the clean output to file, when appropriate
 //need to add more cases
 void analyzeCode(){
     
