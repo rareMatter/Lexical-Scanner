@@ -9,7 +9,7 @@
 #include <string.h>
 #include <ctype.h>
 
-// J: Fixed numbering (5 repeated :] )
+
 //Identify all lexical conventions
 typedef enum {
     nulsym = 1,
@@ -54,7 +54,7 @@ struct token_t{
 };
 
 //code array to read to, and token array
-char code[10000];
+char rawCode[10000] = "";
 struct token_t tokenArray[100];
 
 //functions
@@ -66,13 +66,18 @@ char* outputClean();
 // this should be about how the code is executed
 int main() {
     
+    
     loadProgramFromFile();
     
-    outputClean();
     
-    analyzeCode();
+    // Array to hold cleaned code
+    char* cleanCode;
+    // Set clean code equal to the cleaned array, returned by outputClean()
+    cleanCode = outputClean();
     
-    printCode();
+    //analyzeCode();
+    
+    //printCode();
     
     return 0;
     
@@ -96,8 +101,8 @@ void loadProgramFromFile() {
         int i = 0;      //  <--- Counter
         //   This while loop reads in raw code from a text file and adds it onto the code array, it ends when
         //    it reaches the end of the file
-        while (fscanf(programFile, "%s", &currentCharacter) != EOF) {
-            code[i] = currentCharacter;
+        while (fscanf(programFile, "%c", &currentCharacter) != EOF) {
+            rawCode[i] = currentCharacter;
             i++;
         }
     }
@@ -115,10 +120,10 @@ void analyzeCode(){
     int tokenIndex = 0;
     
     //loop to read in code
-    while (index < strlen(code)) {
+    while (index < strlen(rawCode)) {
         
         //getting code from index
-        char ch = code[index];
+        char ch = rawCode[index];
         
         //switch function to create tokens from code array
         switch(ch) {
@@ -154,7 +159,7 @@ void analyzeCode(){
             default:
                 //if(isalpha(ch)||isdigit(ch)){
                     state=4;
-                    token.lexeme[strlen(token.lexeme)]=ch;
+                    //token.lexeme[strlen(token.lexeme)] = ch;
                     last_index = index+1;
                     break;
                 //}
@@ -172,7 +177,7 @@ void processcode(){
 // Outputs text file with comments removed and returns the character array holding the code also cleaned
 char* outputClean() {
     
-    return void;
+    return NULL;
 }
 
 
