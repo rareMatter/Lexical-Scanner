@@ -51,7 +51,7 @@ typedef enum {
 
 // token struct
 struct token_t{
-    int class;
+    int class = 0;
     char lexeme[11];
 };
 
@@ -373,8 +373,11 @@ void analyzeCode(){
                 break;
             // oddsym
             case 'o':
+                token.lexeme[strlen(token.lexeme)] = ch;
                 if (cleanCode[index + 1] == 'd') {
+                    token.lexeme[strlen(token.lexeme)] = cleanCode[index+1];
                     if (cleanCode[index + 1] == 'd') {
+                        token.lexeme[strlen(token.lexeme)] = cleanCode[index+2];
                         token.class = oddsym;
                         last_index = index + 3;
                     }
@@ -384,9 +387,13 @@ void analyzeCode(){
                 break;
             // read
             case 'r':
+                token.lexeme[strlen(token.lexeme)] = ch;
                 if (cleanCode[index + 1] == 'e') {
+                    token.lexeme[strlen(token.lexeme)] = cleanCode[index+1];
                     if (cleanCode[index + 2] == 'a') {
+                        token.lexeme[strlen(token.lexeme)] = cleanCode[index+2];
                         if (cleanCode[index + 3] == 'd') {
+                            token.lexeme[strlen(token.lexeme)] = cleanCode[index+3];
                             token.class = readsym;
                             last_index = index + 4;
                         }
@@ -398,8 +405,14 @@ void analyzeCode(){
                 
                 // J: Moved to default case for now, may be a better way so that default can be used for errors
                 //if ch == an alpha or digit that is not stated above then it just reads in the characters
+            case if(isdigit(ch)==TRUE):
+                token.lexeme[strlen(token.lexeme)] = ch;
+                token.class = numbersym;
             default:
                 //if(isalpha(ch)||isdigit(ch)){
+                if(token.class == 0 ){
+                    token.class = indentsym;
+                }
                 state=4;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
