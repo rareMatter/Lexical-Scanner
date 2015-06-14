@@ -504,12 +504,12 @@ void outputList() {
     for (int i = 0; i < numberOfTokens; i++) {
         
         if (tokenArray[i].class == identsym) {
-            fprintf(output, "%d", tokenArray[i].class);
+            fprintf(output, "%d ", tokenArray[i].class);
             fprintf(output, "%s", tokenArray[i].lexeme);
         }
         
         else
-            fprintf(output, "%d", tokenArray[i].class);
+            fprintf(output, "%d ", tokenArray[i].class);
     }
 
     
