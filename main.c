@@ -1,6 +1,8 @@
-//  Lexical
+//  Lexical Analyzer
 //
-//  Created by Alex Chatham on 6/10/15.
+//  Created by:
+//  Alex Chatham
+//  Jesse Spencer, je017812
 
 
 
@@ -119,14 +121,17 @@ void loadProgramFromFile() {
 // Outputs text file with comments removed and transfers cleaned array to cleanCode
 void outputClean() {
     
+    // Create output file
+    FILE* output = fopen("cleaninput.txt", "w");
     
-    char currentChar = ' ';
-    int i = 0;
+    char currentChar;
+    int rawIndex = 0;
+    int cleanIndex = 0;
     
-    // The minus one is needed here because the string terminating character was being inserted into the cleanCode array and causing issues
-    while (i < strlen(rawCode) - 1) {
+    
+    while (rawIndex < strlen(rawCode)) {
         
-        currentChar = rawCode[i];
+        currentChar = rawCode[rawIndex];
         
         switch (currentChar) {
             
@@ -134,48 +139,52 @@ void outputClean() {
             case '/':
                 
                 // Check to see if the next charcter is the *, with no whitespace in between, which will mean a comment has been found
-                if (rawCode[i + 1] == '*') {
+                if (rawCode[rawIndex + 1] == '*') {
                     
                     // A comment was found, now we need to find where it stops and change i so that the comment isn't transferred to the cleaned array
                     // Set i to the first character of the comment
-                    i += 2;
-                    currentChar = rawCode[i];
+                    rawIndex += 2;
+                    currentChar = rawCode[rawIndex];
                     // Use a nested switch statement, just like the enclosing one except for finding the end comment notation
                     
                     int commentEndFound = FALSE;
                     
                     while (commentEndFound == FALSE) {
                         
-                        currentChar = rawCode[i];
+                        currentChar = rawCode[rawIndex];
                         
                         switch (currentChar) {
                             
                             case '*':
                                 
-                                if (rawCode[i + 1] == '/') {
+                                if (rawCode[rawIndex + 1] == '/') {
                                     commentEndFound = TRUE;
-                                    i += 2;
+                                    rawIndex += 2;
                                     break;
                                 }
                                 
-                                i++;
+                                rawIndex++;
                                 break;
                                 
                             default:
-                                i++;
+                                rawIndex++;
                                 break;
                         }
                     }
                 }
                 
-                cleanCode[i] = rawCode[i];
-                i++;
+                cleanCode[cleanIndex] = rawCode[rawIndex];
+                fprintf(output, "%c", cleanCode[cleanIndex]);
+                cleanIndex++;
+                rawIndex++;
                 break;
             
             // The default case will simply transfer the characters to the cleaned array
             default:
-                cleanCode[i] = rawCode[i];
-                i++;
+                cleanCode[cleanIndex] = rawCode[rawIndex];
+                fprintf(output, "%c", cleanCode[cleanIndex]);
+                cleanIndex++;
+                rawIndex++;
                 break;
         }
     }
@@ -287,7 +296,7 @@ void analyzeCode(){
                 last_index = index+1;
                 break;
             case '-':
-                token.class = plussym;
+                token.class = minussym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
@@ -338,7 +347,7 @@ void analyzeCode(){
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
-                
+            
                 //A: cases left oddsym, eqsym, neqsym, beginsym, read sym, nulsym, numbersym. I think that is all
                 
                 // J: Moved to default case for now, may be a better way so that default can be used for errors
