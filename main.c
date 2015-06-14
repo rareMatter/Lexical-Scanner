@@ -221,14 +221,15 @@ void analyzeCode(){
             case 'i':
                 
                 state=2;
+                if(token.lexeme[0]=='i'){
                 token.class=identsym;
+                }
                 token.lexeme[strlen(token.lexeme)]=ch;
                  if (cleanCode[index + 1] == 'f') {
-                 token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
-                 token.class = ifsym;
-                 last_index = index + 2;
-                 break;
-                    
+                    token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
+                    token.class = ifsym;
+                    last_index = index + 2;
+                    break;
                  }
                 last_index = index + 1;
                 
@@ -260,21 +261,7 @@ void analyzeCode(){
             // begin
             case 'b':
                  token.class = identsym;
-                if (cleanCode[index + 1] == 'e') {
-                    token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
-                    if (cleanCode[index + 2] == 'g') {
-                        token.lexeme[strlen(token.lexeme)]=cleanCode[index + 2];
-                        if (cleanCode[index + 3] == 'i') {
-                            token.lexeme[strlen(token.lexeme)]=cleanCode[index + 3];
-                            if (cleanCode[index + 4] == 'n') {
-                                token.lexeme[strlen(token.lexeme)]=cleanCode[index + 4];
-                                token.class = beginsym;
-                                last_index = index + 5;
-                                break;
-                            }
-                        }
-                    }
-                }
+                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case 'p':
@@ -300,7 +287,9 @@ void analyzeCode(){
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]== 'a') {
                     token.class=callsym;
-                    
+                }
+                if(cleanCode[index+1]== 'o'){
+                    token.class=constsym;
                 }
                 last_index = index+1;
                 break;
@@ -309,6 +298,10 @@ void analyzeCode(){
             case ' ' :
             case '\n':
             case '\t':
+                if (cleanCode[index-1]==' '){
+                    last_index = index +1;
+                    break;
+                }
                 tokenArray[tokenIndex]=token;
                 //this loop cleans out the lexeme array
                 for(int i=0;i<12;i++){
@@ -419,6 +412,9 @@ void analyzeCode(){
             // read
             case 'r':
                 token.lexeme[strlen(token.lexeme)] = ch;
+                 if (cleanCode[index-1]==' ') {
+                    token.class = identsym;
+                }
                 if (cleanCode[index + 1] == 'e') {
                     token.lexeme[strlen(token.lexeme)] = cleanCode[index+1];
                     if (cleanCode[index + 2] == 'a') {
@@ -435,7 +431,9 @@ void analyzeCode(){
                 break;
             case 'n':
                 token.lexeme[strlen(token.lexeme)] = ch;
+                if (token.lexeme[0]=='n') {
                 token.class = identsym;
+                }
                 if (cleanCode[index + 1]== 'u'){
                     token.class = nulsym;
                 }
@@ -455,6 +453,15 @@ void analyzeCode(){
                 
                 if(isdigit(ch)==TRUE){
                     token.class = numbersym;
+                }
+                if (isalpha(ch)==TRUE &&isalpha(cleanCode[index-1])==FALSE) {
+                    token.class = identsym;
+                }
+                if (token.lexeme[0]=='c' && token.lexeme[1]=='o') {
+                    token.class = constsym;
+                }
+                if (token.lexeme[0]=='b'&& token.lexeme[1]=='e') {
+                    token.class = beginsym;
                 }
                 last_index = index+1;
                 break;
