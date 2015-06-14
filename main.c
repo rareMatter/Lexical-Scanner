@@ -205,7 +205,8 @@ void analyzeCode(){
     
     //loop to read in code
     while (index<strlen(cleanCode)) {
-        index=last_index;
+        
+        index = last_index;
         //getting code from index
         char ch = cleanCode[index];
         
@@ -383,9 +384,17 @@ void analyzeCode(){
                 break;
             // read
             case 'r':
+                if (cleanCode[index + 1] == 'e') {
+                    if (cleanCode[index + 2] == 'a') {
+                        if (cleanCode[index + 3] == 'd') {
+                            token.class = readsym;
+                            last_index = index + 4;
+                        }
+                    }
+                }
                 break;
             
-                //A: cases left readsym, nulsym, numbersym. I think that is all
+                //A: cases left  nulsym, numbersym. I think that is all
                 
                 // J: Moved to default case for now, may be a better way so that default can be used for errors
                 //if ch == an alpha or digit that is not stated above then it just reads in the characters
