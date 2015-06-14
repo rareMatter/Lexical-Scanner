@@ -51,7 +51,7 @@ typedef enum {
 
 // token struct
 struct token_t{
-    int class = 0;
+    int class = nulsym;
     char lexeme[11];
 };
 
@@ -404,14 +404,14 @@ void analyzeCode(){
                 //A: cases left  nulsym, numbersym. I think that is all
                 
                 // J: Moved to default case for now, may be a better way so that default can be used for errors
-                //if ch == an alpha or digit that is not stated above then it just reads in the characters
-            case if(isdigit(ch)==TRUE):
-                token.lexeme[strlen(token.lexeme)] = ch;
-                token.class = numbersym;
+                //if ch == an alpha or digit that is not stated above then it just reads in the character
             default:
                 //if(isalpha(ch)||isdigit(ch)){
-                if(token.class == 0 ){
+                if(token.class == nulsym ){
                     token.class = indentsym;
+                }
+                if(isdigit(ch)==true){
+                    token.class = numbersym;
                 }
                 state=4;
                 token.lexeme[strlen(token.lexeme)]=ch;
