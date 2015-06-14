@@ -248,7 +248,19 @@ void analyzeCode(){
                 }
                 last_index = index+1;
                 break;
-                
+            // begin
+            case 'b':
+                if (cleanCode[index + 1] == 'e') {
+                    if (cleanCode[index + 2] == 'g') {
+                        if (cleanCode[index + 3] == 'i') {
+                            if (cleanCode[index + 4] == 'n') {
+                                token.class = beginsym;
+                            }
+                        }
+                    }
+                }
+                last_index = index + 5;
+                break;
             case 'p':
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]=='r') {
@@ -346,6 +358,14 @@ void analyzeCode(){
                 token.class = semicolonsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
+                break;
+            // oddsym, maybe?
+            case 'o':
+                break;
+            case '=':
+                break;
+            // read
+            case 'r':
                 break;
             
                 //A: cases left oddsym, eqsym, neqsym, beginsym, read sym, nulsym, numbersym. I think that is all
