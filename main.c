@@ -207,7 +207,7 @@ void analyzeCode(){
     while (index<strlen(cleanCode)) {
         index=last_index;
         //getting code from index
-        char ch= cleanCode[index];
+        char ch = cleanCode[index];
         
         //switch function to create tokens from code array
         switch(ch) {
@@ -255,11 +255,11 @@ void analyzeCode(){
                         if (cleanCode[index + 3] == 'i') {
                             if (cleanCode[index + 4] == 'n') {
                                 token.class = beginsym;
+                                last_index = index + 5;
                             }
                         }
                     }
                 }
-                last_index = index + 5;
                 break;
             case 'p':
                 token.lexeme[strlen(token.lexeme)]=ch;
@@ -351,6 +351,7 @@ void analyzeCode(){
                 token=tokenArray[tokenIndex];
                 token.class = periodsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
+                break;
             case ';':
                 tokenArray[tokenIndex]=token;
                 tokenIndex++;
@@ -359,8 +360,24 @@ void analyzeCode(){
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
-            // oddsym, maybe?
+            case '#':
+                token.class = neqsym;
+                token.lexeme[strlen(token.lexeme)] = ch;
+                last_index = index + 1;
+                break;
+            case '%':
+                token.class = geqsym;
+                token.lexeme[strlen(token.lexeme)] = ch;
+                last_index = index + 1;
+                break;
+            // oddsym
             case 'o':
+                if (cleanCode[index + 1] == 'd') {
+                    if (cleanCode[index + 1] == 'd') {
+                        token.class = oddsym;
+                        last_index = index + 3;
+                    }
+                }
                 break;
             case '=':
                 break;
@@ -368,7 +385,7 @@ void analyzeCode(){
             case 'r':
                 break;
             
-                //A: cases left oddsym, eqsym, neqsym, beginsym, read sym, nulsym, numbersym. I think that is all
+                //A: cases left readsym, nulsym, numbersym. I think that is all
                 
                 // J: Moved to default case for now, may be a better way so that default can be used for errors
                 //if ch == an alpha or digit that is not stated above then it just reads in the characters
