@@ -68,12 +68,16 @@ char rawCode[CODE_BUFFER] = "";
 char cleanCode[CODE_BUFFER] = "";
 struct token_t tokenArray[100];
 
+int numberOfTokens = 0;
+
 
 //functions
 void loadProgramFromFile();
 void outputClean();
 void analyzeCode();
 void printCode();
+void outputTable();
+void outputList();
 
 
 // this should be about how the code is executed
@@ -86,7 +90,7 @@ int main() {
         
     //analyzeCode();
     
-    //printCode();
+    printCode();
     
     return 0;
     
@@ -246,7 +250,7 @@ void analyzeCode(){
                 break;
                 
             case 'v':
-                 token.class = indentsym;
+                 token.class = identsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]=='a') {
                     token.class = varsym;
@@ -255,7 +259,7 @@ void analyzeCode(){
                 break;
             // begin
             case 'b':
-                 token.class = indentsym;
+                 token.class = identsym;
                 if (cleanCode[index + 1] == 'e') {
                     token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
                     if (cleanCode[index + 2] == 'g') {
@@ -307,7 +311,7 @@ void analyzeCode(){
             case '\t':
                 tokenArray[tokenIndex]=token;
                 //this loop cleans out the lexeme array
-                for(i=0;i<12;i++){
+                for(int i=0;i<12;i++){
                 token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
@@ -355,7 +359,7 @@ void analyzeCode(){
             case ',':
                 //since there is not a space before commas we need to end the last token
                 tokenArray[tokenIndex]=token;
-                for(i=0;i<12;i++){
+                for(int i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
@@ -366,7 +370,7 @@ void analyzeCode(){
             case '.':
                 //there is not a space before periods
                 tokenArray[tokenIndex]=token;
-                for(i=0;i<12;i++){
+                for(int i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
@@ -376,7 +380,7 @@ void analyzeCode(){
                 break;
             case ';':
                 tokenArray[tokenIndex]=token;
-                for(i=0;i<12;i++){
+                for(int i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
@@ -443,13 +447,13 @@ void analyzeCode(){
             default:
                 //if(isalpha(ch)||isdigit(ch)){
                 if(strlen(token.lexeme) == 0 ){
-                    token.class = indentsym;
+                    token.class = identsym;
                 }
                 
                 state=4;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 
-                if(isdigit(ch)==true){
+                if(isdigit(ch)==TRUE){
                     token.class = numbersym;
                 }
                 last_index = index+1;
@@ -459,11 +463,34 @@ void analyzeCode(){
                 
         }
     }
+    
+    numberOfTokens = tokenIndex + 1;
 
 }
 
-void processcode(){
+
+void printCode() {
+    
+    outputTable();
+    outputList();
     
 }
 
+void outputTable() {
+    
+    FILE* output = fopen("lexemetable.txt", "w");
+    
+    // Header
+    fprintf(output, "Lexeme\tToken Type\n");
+    
+    for (int i = 0; i < numberOfTokens; i++) {
+        
+    }
+    
+}
 
+void outputList() {
+    
+    
+    
+}
