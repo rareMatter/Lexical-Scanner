@@ -51,7 +51,7 @@ typedef enum {
 
 // token struct
 struct token_t{
-    int class = nulsym;
+    int class = 0;
     char lexeme[11];
 };
 
@@ -219,19 +219,17 @@ void analyzeCode(){
                 state=2;
                 token.class=identsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
-                last_index = index+1;
+                 if (cleanCode[index + 1] == 'f') {
+                 token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
+                 token.class = ifsym;
+                 last_index = index + 2;
+                 break;
+                    
+                 }
+                last_index = index + 1;
                 
                 break;
-                
-                //if ch is == f then it is an if statement "if" is the only operation with an f
-            case 'f':
-                state=3;
-                token.class = ifsym;
-                token.lexeme[strlen(token.lexeme)]=ch;
-                last_index = index+1;
-                break;
-                
-                // if ch is == e then it could could be the end statement
+                // if ch is == e then it could could be the end or else statement
             case 'e':
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]=='n') {
@@ -240,9 +238,13 @@ void analyzeCode(){
                 else if (cleanCode[index+1]=='l'){
                     token.class = elsesym;
                 }
+                else if (token.class == nulsym){
+                    token.class = identsym;
+                }
                 break;
                 
             case 'v':
+                 token.class = indentsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]=='a') {
                     token.class = varsym;
@@ -251,6 +253,7 @@ void analyzeCode(){
                 break;
             // begin
             case 'b':
+                 token.class = indentsym;
                 if (cleanCode[index + 1] == 'e') {
                     if (cleanCode[index + 2] == 'g') {
                         if (cleanCode[index + 3] == 'i') {
@@ -400,14 +403,19 @@ void analyzeCode(){
                     }
                 }
                 break;
-            
+            case 'n':
+                token.lexeme[strlen(token.lexeme)] = ch;
+                if (cleanCode[index + 1]== 'u'){
+                    token.class = nulsym;
+                }
+                break;
                 //A: cases left  nulsym, numbersym. I think that is all
                 
                 // J: Moved to default case for now, may be a better way so that default can be used for errors
                 //if ch == an alpha or digit that is not stated above then it just reads in the character
             default:
                 //if(isalpha(ch)||isdigit(ch)){
-                if(token.class == nulsym ){
+                if(token.class == 0 ){
                     token.class = indentsym;
                 }
                 if(isdigit(ch)==true){
