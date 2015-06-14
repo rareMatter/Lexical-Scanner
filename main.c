@@ -51,7 +51,7 @@ typedef enum {
 
 // token struct
 struct token_t{
-    int class = 0;
+    int class;
     char lexeme[11];
 };
 
