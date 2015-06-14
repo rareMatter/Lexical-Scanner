@@ -232,15 +232,17 @@ void analyzeCode(){
                 // if ch is == e then it could could be the end or else statement
             case 'e':
                 token.lexeme[strlen(token.lexeme)]=ch;
+                //this is the case that it is an "e" and not the last e on else
+                if (token.lexeme[3]=='\0'){
+                    token.class = identsym;
+                }
                 if (cleanCode[index+1]=='n') {
                     token.class = endsym;
                 }
-                else if (cleanCode[index+1]=='l'){
+                if (cleanCode[index+1]=='l'){
                     token.class = elsesym;
                 }
-                else if (token.class == nulsym){
-                    token.class = identsym;
-                }
+                last_index = index +1;
                 break;
                 
             case 'v':
@@ -255,15 +257,21 @@ void analyzeCode(){
             case 'b':
                  token.class = indentsym;
                 if (cleanCode[index + 1] == 'e') {
+                    token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
                     if (cleanCode[index + 2] == 'g') {
+                        token.lexeme[strlen(token.lexeme)]=cleanCode[index + 2];
                         if (cleanCode[index + 3] == 'i') {
+                            token.lexeme[strlen(token.lexeme)]=cleanCode[index + 3];
                             if (cleanCode[index + 4] == 'n') {
+                                token.lexeme[strlen(token.lexeme)]=cleanCode[index + 4];
                                 token.class = beginsym;
                                 last_index = index + 5;
+                                break;
                             }
                         }
                     }
                 }
+                last_index = index+1;
                 break;
             case 'p':
                 token.lexeme[strlen(token.lexeme)]=ch;
@@ -278,15 +286,17 @@ void analyzeCode(){
                 if (cleanCode[index+1]== 'r') {
                     token.class= writesym;
                 }
-                else if (cleanCode[index+1]=='h'){
+                if (cleanCode[index+1]=='h'){
                     token.class= whilesym;
                 }
                 last_index = index+1;
                 break;
                 
             case 'c':
+                token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]== 'a') {
                     token.class=callsym;
+                    
                 }
                 last_index = index+1;
                 break;
@@ -296,8 +306,11 @@ void analyzeCode(){
             case '\n':
             case '\t':
                 tokenArray[tokenIndex]=token;
+                //this loop cleans out the lexeme array
+                for(i=0;i<12;i++){
+                token.lexeme[i] = '\0';
+                }
                 tokenIndex++;
-                token=tokenArray[tokenIndex];
                 last_index = index+1;
                 break;
                 //case where the character is either a comment or division
@@ -342,8 +355,10 @@ void analyzeCode(){
             case ',':
                 //since there is not a space before commas we need to end the last token
                 tokenArray[tokenIndex]=token;
+                for(i=0;i<12;i++){
+                    token.lexeme[i] = '\0';
+                }
                 tokenIndex++;
-                token=tokenArray[tokenIndex];
                 token.class = commasym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -351,15 +366,20 @@ void analyzeCode(){
             case '.':
                 //there is not a space before periods
                 tokenArray[tokenIndex]=token;
+                for(i=0;i<12;i++){
+                    token.lexeme[i] = '\0';
+                }
                 tokenIndex++;
-                token=tokenArray[tokenIndex];
                 token.class = periodsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
+                last_index = index+1;
                 break;
             case ';':
                 tokenArray[tokenIndex]=token;
+                for(i=0;i<12;i++){
+                    token.lexeme[i] = '\0';
+                }
                 tokenIndex++;
-                token=tokenArray[tokenIndex];
                 token.class = semicolonsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -385,8 +405,12 @@ void analyzeCode(){
                         last_index = index + 3;
                     }
                 }
+                last_index = index +1;
                 break;
             case '=':
+                token.lexeme[strlen(token.lexeme)] = ch;
+                token.class = eqlsym;
+                last_index = index +1;
                 break;
             // read
             case 'r':
@@ -399,12 +423,15 @@ void analyzeCode(){
                             token.lexeme[strlen(token.lexeme)] = cleanCode[index+3];
                             token.class = readsym;
                             last_index = index + 4;
+                            break;
                         }
                     }
                 }
+                last_index = index +1;
                 break;
             case 'n':
                 token.lexeme[strlen(token.lexeme)] = ch;
+                token.class = identsym;
                 if (cleanCode[index + 1]== 'u'){
                     token.class = nulsym;
                 }
@@ -415,14 +442,16 @@ void analyzeCode(){
                 //if ch == an alpha or digit that is not stated above then it just reads in the character
             default:
                 //if(isalpha(ch)||isdigit(ch)){
-                if(token.class == 0 ){
+                if(strlen(token.lexeme) == 0 ){
                     token.class = indentsym;
                 }
+                
+                state=4;
+                token.lexeme[strlen(token.lexeme)]=ch;
+                
                 if(isdigit(ch)==true){
                     token.class = numbersym;
                 }
-                state=4;
-                token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
                 //}
