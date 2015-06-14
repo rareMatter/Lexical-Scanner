@@ -488,16 +488,29 @@ void outputTable() {
     FILE* output = fopen("lexemetable.txt", "w");
     
     // Header
-    fprintf(output, "Lexeme\tToken Type\n");
+    fprintf(output, "Lexeme\t\tToken Type\n");
     
     for (int i = 0; i < numberOfTokens; i++) {
-        
+        fprintf(output, "%s\t\t%d\n", tokenArray[i].lexeme, tokenArray[i].class);
     }
     
 }
 
 void outputList() {
     
+    FILE* output = fopen("lexemelist.txt", "w");
     
+    
+    for (int i = 0; i < numberOfTokens; i++) {
+        
+        if (tokenArray[i].class == identsym) {
+            fprintf(output, "%d", tokenArray[i].class);
+            fprintf(output, "%s", tokenArray[i].lexeme);
+        }
+        
+        else
+            fprintf(output, "%d", tokenArray[i].class);
+    }
+
     
 }
