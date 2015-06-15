@@ -19,10 +19,10 @@ z		2
 ,		17
 q		2
 ,		17
-r		17
+r		2
 ;		18
-proceduree		30
-mult		2
+procedure	30
+mult		6
 ;		18
 var		29
 a		2
@@ -83,7 +83,7 @@ y		2
 n		2
 ;		18
 call		27
-mult		2
+mult		6
 ;		18
 end		22
 .		19
