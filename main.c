@@ -373,6 +373,11 @@ void analyzeCode(){
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
+            case 'm':
+                token.class = multsym;
+                token.lexeme[strlen(token.lexeme)]=ch;
+                last_index = index + 1;
+                break;
             case '-':
                 if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
