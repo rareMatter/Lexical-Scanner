@@ -570,7 +570,7 @@ void analyzeCode(){
                 
                 
         }
-         numberOfTokens = tokenIndex + 1;
+         numberOfTokens = tokenIndex;
     }
     
 }
