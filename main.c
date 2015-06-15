@@ -487,7 +487,7 @@ void analyzeCode(){
                 // read
             case 'r':
                 token.lexeme[strlen(token.lexeme)] = ch;
-                if (cleanCode[index-1]==' ') {
+                if (cleanCode[index-1]==' '||cleanCode[index-1]==',') {
                     token.class = identsym;
                 }
                 if (cleanCode[index + 1] == 'e') {
