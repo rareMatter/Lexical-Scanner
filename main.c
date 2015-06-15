@@ -221,7 +221,7 @@ void analyzeCode(){
         if (cleanCode[index-1]==','&&ch!=' '&&ch!='\n'&&ch!='\t') {
             tokenArray[tokenIndex]=token;
             tokenIndex++;
-            for(i=0;i<12;i++){
+            for(int i=0;i<12;i++){
                 token.lexeme[i] = '\0';
             }
         }
@@ -230,7 +230,7 @@ void analyzeCode(){
         if (ch==':'&&cleanCode[index-1]!=' ') {
             tokenArray[tokenIndex]=token;
             tokenIndex++;
-            for(i=0;i<12;i++){
+            for(int i=0;i<12;i++){
                 token.lexeme[i] = '\0';
             }
         }
@@ -240,7 +240,7 @@ void analyzeCode(){
             if (ch!=' ') {
                 tokenArray[tokenIndex]=token;
                 tokenIndex++;
-                for(i=0;i<12;i++){
+                for(int i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
             }
@@ -347,7 +347,7 @@ void analyzeCode(){
             if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(i=0;i<12;i++){
+                    for(int i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
@@ -360,7 +360,7 @@ void analyzeCode(){
             if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(i=0;i<12;i++){
+                    for(int i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
@@ -373,7 +373,7 @@ void analyzeCode(){
             if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(i=0;i<12;i++){
+                    for(int i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
@@ -386,7 +386,7 @@ void analyzeCode(){
             if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(i=0;i<12;i++){
+                    for(int i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
@@ -402,7 +402,7 @@ void analyzeCode(){
                 if (cleanCode[index+1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(i=0;i<12;i++){
+                    for(int i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
@@ -412,7 +412,7 @@ void analyzeCode(){
             if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(i=0;i<12;i++){
+                    for(int i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
@@ -450,7 +450,7 @@ void analyzeCode(){
                 token.class = periodsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 tokenArray[tokenIndex]=token;
-                for(i=0;i<12;i++){
+                for(int i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
