@@ -590,7 +590,12 @@ void outputTable() {
     fprintf(output, "Lexeme\t\tToken Type\n");
     
     for (int i = 0; i < numberOfTokens; i++) {
-        fprintf(output, "%s\t\t%d\n", tokenArray[i].lexeme, tokenArray[i].class);
+       fprintf(output, "%s", tokenArray[i].lexeme);
+        fprintf(output, "\t");
+        if(strlen(tokenArray[i].lexeme)<6){
+            fprintf(output, "\t");
+        }
+        fprintf(output, "%d\n", tokenArray[i].class);
     }
     
 }
