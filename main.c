@@ -498,7 +498,7 @@ void analyzeCode(){
                 if (cleanCode[index-1]==' '||cleanCode[index-1]==',') {
                     token.class = identsym;
                 }
-                if (cleanCode[index + 1] == 'e') {
+                if (cleanCode[index + 1] == 'e'&& cleanCode[index+2]=='a') {
                     token.lexeme[strlen(token.lexeme)] = cleanCode[index+1];
                     if (cleanCode[index + 2] == 'a') {
                         token.lexeme[strlen(token.lexeme)] = cleanCode[index+2];
