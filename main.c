@@ -374,7 +374,10 @@ void analyzeCode(){
                 last_index = index+1;
                 break;
             case 'm':
-                token.class = multsym;
+                token.class = identsym;
+                if(cleanCode[index+1]=='u'){
+                    token.class = multsym;
+                }
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index + 1;
                 break;
