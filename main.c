@@ -596,7 +596,7 @@ void outputList() {
         
         if (tokenArray[i].class == identsym) {
             fprintf(output, "%d ", tokenArray[i].class);
-            fprintf(output, "%s", tokenArray[i].lexeme);
+            fprintf(output, "%s ", tokenArray[i].lexeme);
         }
         
         else
