@@ -49,12 +49,16 @@ typedef enum {
     elsesym = 33
 } token_type;
 
+
+int numberOfTokens = 0;
+
+
 // token struct
 struct token_t{
     int class;
     char lexeme[11];
 };
-
+int i;
 
 #define TRUE 1
 #define FALSE 0
@@ -68,8 +72,6 @@ char rawCode[CODE_BUFFER] = "";
 char cleanCode[CODE_BUFFER] = "";
 struct token_t tokenArray[100];
 
-int numberOfTokens = 0;
-
 
 //functions
 void loadProgramFromFile();
@@ -79,7 +81,6 @@ void printCode();
 void outputTable();
 void outputList();
 
-
 // this should be about how the code is executed
 int main() {
     
@@ -87,8 +88,8 @@ int main() {
     loadProgramFromFile();
     
     outputClean();
-        
-    //analyzeCode();
+    
+    analyzeCode();
     
     printCode();
     
@@ -138,8 +139,8 @@ void outputClean() {
         currentChar = rawCode[rawIndex];
         
         switch (currentChar) {
-            
-            // Case for when the forward slash is encountered
+                
+                // Case for when the forward slash is encountered
             case '/':
                 
                 // Check to see if the next charcter is the *, with no whitespace in between, which will mean a comment has been found
@@ -158,7 +159,7 @@ void outputClean() {
                         currentChar = rawCode[rawIndex];
                         
                         switch (currentChar) {
-                            
+                                
                             case '*':
                                 
                                 if (rawCode[rawIndex + 1] == '/') {
@@ -182,8 +183,8 @@ void outputClean() {
                 cleanIndex++;
                 rawIndex++;
                 break;
-            
-            // The default case will simply transfer the characters to the cleaned array
+                
+                // The default case will simply transfer the characters to the cleaned array
             default:
                 cleanCode[cleanIndex] = rawCode[rawIndex];
                 fprintf(output, "%c", cleanCode[cleanIndex]);
@@ -207,6 +208,7 @@ void analyzeCode(){
     int state = 1;
     int tokenIndex = 0;
     int i;
+    
     for(i=0;i<12;i++){
         token.lexeme[i] = '\0';
     }
@@ -600,6 +602,8 @@ void outputList() {
         else
             fprintf(output, "%d ", tokenArray[i].class);
     }
-
+    
     
 }
+
+
