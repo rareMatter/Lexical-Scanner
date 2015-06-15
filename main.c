@@ -207,7 +207,7 @@ void analyzeCode(){
     int state = 1;
     int tokenIndex = 0;
     
-    for(i=0;i<12;i++){
+    for(int i=0;i<12;i++){
         token.lexeme[i] = '\0';
     }
     //loop to read in code
