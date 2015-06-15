@@ -207,7 +207,7 @@ void analyzeCode(){
     int state = 1;
     int tokenIndex = 0;
     
-    for(int i=0;i<12;i++){
+    for(i=0;i<12;i++){
         token.lexeme[i] = '\0';
     }
     //loop to read in code
@@ -221,7 +221,7 @@ void analyzeCode(){
         if (cleanCode[index-1]==','&&ch!=' '&&ch!='\n'&&ch!='\t') {
             tokenArray[tokenIndex]=token;
             tokenIndex++;
-            for(int i=0;i<12;i++){
+            for(i=0;i<12;i++){
                 token.lexeme[i] = '\0';
             }
         }
@@ -230,22 +230,21 @@ void analyzeCode(){
         if (ch==':'&&cleanCode[index-1]!=' ') {
             tokenArray[tokenIndex]=token;
             tokenIndex++;
-            for(int i=0;i<12;i++){
+            for(i=0;i<12;i++){
                 token.lexeme[i] = '\0';
             }
         }
         
-        //this allows for letters and numbers to come right after math symbols
         if (cleanCode[index-1]=='/'||cleanCode[index-1]=='+'||cleanCode[index-1]=='-'||cleanCode[index-1]=='='||cleanCode[index-1]=='*') {
             if (ch!=' ') {
                 tokenArray[tokenIndex]=token;
                 tokenIndex++;
-                for(int i=0;i<12;i++){
+                for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
             }
         }
-
+       
         //switch function to create tokens from code array
         switch(ch) {
                 
@@ -253,27 +252,27 @@ void analyzeCode(){
             case 'i':
                 
                 state=2;
-                if(token.lexeme[0]=='i'){
-                token.class=identsym;
+                if (token.lexeme[0]=='i') {
+                    token.class=identsym;
                 }
                 token.lexeme[strlen(token.lexeme)]=ch;
-                 if (cleanCode[index + 1] == 'f') {
+                if (cleanCode[index + 1] == 'f') {
                     token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
                     token.class = ifsym;
                     last_index = index + 2;
                     break;
-                 }
+                    
+                }
                 last_index = index + 1;
                 
                 break;
                 // if ch is == e then it could could be the end or else statement
             case 'e':
                 token.lexeme[strlen(token.lexeme)]=ch;
-                //this is the case that it is an "e" and not the last e on else
-                if (token.lexeme[3]=='\0'){
+                if(token.lexeme[3]=='\0'){
                     token.class = identsym;
                 }
-                if (cleanCode[index+1]=='n') {
+                if (cleanCode[index+1]=='n'&&token.lexeme[0]!='t') {
                     token.class = endsym;
                 }
                 if (cleanCode[index+1]=='l'){
@@ -281,20 +280,19 @@ void analyzeCode(){
                 }
                 last_index = index +1;
                 break;
-                
             case 'v':
-                 token.class = identsym;
+                token.class = identsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]=='a') {
                     token.class = varsym;
                 }
                 last_index = index+1;
                 break;
-            // begin
+                // begin
             case 'b':
-                 token.class = identsym;
-                 token.lexeme[strlen(token.lexeme)]=ch;
-                last_index = index+1;
+                token.class = identsym;
+                token.lexeme[strlen(token.lexeme)]=ch;
+                last_index = index +1;
                 break;
             case 'p':
                 token.lexeme[strlen(token.lexeme)]=ch;
@@ -319,9 +317,14 @@ void analyzeCode(){
                 token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index+1]== 'a') {
                     token.class=callsym;
+                    last_index = index+1;
+                    break;
                 }
-                if(cleanCode[index+1]== 'o'){
+                
+                if (cleanCode[index+1]=='o') {
                     token.class=constsym;
+                    last_index = index+1;
+                    break;
                 }
                 last_index = index+1;
                 break;
@@ -330,67 +333,64 @@ void analyzeCode(){
             case ' ' :
             case '\n':
             case '\t':
-                if (cleanCode[index-1]==' '||cleanCode[index-1]=='\n'){
+                if (cleanCode[index-1]==' '||cleanCode[index-1]=='\n') {
                     last_index = index +1;
                     break;
+                    
                 }
                 tokenArray[tokenIndex]=token;
-                //this loop cleans out the lexeme array
-                for(int i=0;i<12;i++){
+                tokenIndex++;
+                for(i=0;i<12;i++){
                 token.lexeme[i] = '\0';
                 }
-                tokenIndex++;
+                
                 last_index = index+1;
                 break;
                 //case where the character is either a comment or division
             case '/':
-            if (cleanCode[index-1]!=' ') {
+                if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(int i=0;i<12;i++){
+                    for(i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
-
                 token.class = slashsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case '+':
-            if (cleanCode[index-1]!=' ') {
+                if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(int i=0;i<12;i++){
+                    for(i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
-
                 token.class = plussym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case '-':
-            if (cleanCode[index-1]!=' ') {
+                if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(int i=0;i<12;i++){
+                    for(i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
-
                 token.class = minussym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case '*':
-            if (cleanCode[index-1]!=' ') {
+                if (cleanCode[index-1]!=' ') {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
-                    for(int i=0;i<12;i++){
+                    for(i=0;i<12;i++){
                         token.lexeme[i] = '\0';
                     }
                 }
-
                 token.class = multsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -398,25 +398,9 @@ void analyzeCode(){
             case '(':
                 token.class = lparentsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
-                
-                if (cleanCode[index+1]!=' ') {
-                    tokenArray[tokenIndex]=token;
-                    tokenIndex++;
-                    for(int i=0;i<12;i++){
-                        token.lexeme[i] = '\0';
-                    }
-                }
                 last_index = index+1;
                 break;
             case ')':
-            if (cleanCode[index-1]!=' ') {
-                    tokenArray[tokenIndex]=token;
-                    tokenIndex++;
-                    for(int i=0;i<12;i++){
-                        token.lexeme[i] = '\0';
-                    }
-                }
-
                 token.class = rparentsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -432,25 +416,26 @@ void analyzeCode(){
             case ',':
                 //since there is not a space before commas we need to end the last token
                 tokenArray[tokenIndex]=token;
-                for(int i=0;i<12;i++){
+                for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
+                token=tokenArray[tokenIndex];
                 token.class = commasym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case '.':
-                //there is not a space before periods
+                //there is not a space before periods, periods also end the file
                 tokenArray[tokenIndex]=token;
-                for(int i=0;i<12;i++){
+                for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
                 token.class = periodsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 tokenArray[tokenIndex]=token;
-                for(int i=0;i<12;i++){
+                for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
@@ -458,7 +443,7 @@ void analyzeCode(){
                 break;
             case ';':
                 tokenArray[tokenIndex]=token;
-                for(int i=0;i<12;i++){
+                for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
@@ -476,7 +461,7 @@ void analyzeCode(){
                 token.lexeme[strlen(token.lexeme)] = ch;
                 last_index = index + 1;
                 break;
-            // oddsym
+                // oddsym
             case 'o':
                 token.lexeme[strlen(token.lexeme)] = ch;
                 if (cleanCode[index + 1] == 'd') {
@@ -488,7 +473,7 @@ void analyzeCode(){
                         break;
                     }
                 }
-                last_index = index +1;
+                last_index = index + 1;
                 break;
             case '=':
                 token.lexeme[strlen(token.lexeme)] = ch;
@@ -497,10 +482,10 @@ void analyzeCode(){
                 }
                 last_index = index + 1;
                 break;
-            // read
+                // read
             case 'r':
                 token.lexeme[strlen(token.lexeme)] = ch;
-                 if (cleanCode[index-1]==' ') {
+                if (cleanCode[index-1]==' ') {
                     token.class = identsym;
                 }
                 if (cleanCode[index + 1] == 'e') {
@@ -515,7 +500,7 @@ void analyzeCode(){
                         }
                     }
                 }
-                last_index = index +1;
+                last_index = index + 1;
                 break;
             case '>':
                 token.lexeme[strlen(token.lexeme)] = ch;
@@ -552,13 +537,9 @@ void analyzeCode(){
                 //if ch == an alpha or digit that is not stated above then it just reads in the character
             default:
                 //if(isalpha(ch)||isdigit(ch)){
-                if(strlen(token.lexeme) == 0 ){
+                if(token.class == 0 ){
                     token.class = identsym;
                 }
-                
-                state=4;
-                token.lexeme[strlen(token.lexeme)]=ch;
-                
                 if(isdigit(ch)==TRUE){
                     token.class = numbersym;
                 }
@@ -571,18 +552,18 @@ void analyzeCode(){
                 if (token.lexeme[0]=='b'&& token.lexeme[1]=='e') {
                     token.class = beginsym;
                 }
+                state=4;
+                token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
                 //}
                 
                 
         }
+         numberOfTokens = tokenIndex + 1;
     }
     
-    numberOfTokens = tokenIndex + 1;
-
 }
-
 
 void printCode() {
     
