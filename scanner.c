@@ -4,12 +4,25 @@
 //  Alex Chatham
 //  Jesse Spencer, je017812
 
-
+// BANCH: Efficiency
+// This branch is to improve performance and memory usage
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+
+// Constants
+#define TRUE 1
+#define FALSE 0
+
+static const int CODE_BUFFER = 10000;
+static const int TOKEN_ARRAY_BUFFER = 1000;
+
+static const char INPUT_FILE_NAME[] = "input.txt";
+
+static const int MAX_LEXEME_LENGTH = 11;
 
 
 //Identify all lexical conventions
@@ -49,31 +62,29 @@ typedef enum {
     elsesym = 33
 } token_type;
 
-
-int numberOfTokens = 0;
-
-
-// token struct
+// Token struct
 struct token_t{
     int class;
-    char lexeme[11];
+    char lexeme[MAX_LEXEME_LENGTH];
 };
-int i;
-
-#define TRUE 1
-#define FALSE 0
 
 
-static const int CODE_BUFFER = 10000;
+// Global variables
+//
 
+// Used to track the final size of the token array
+int numberOfTokens = 0;
+int rawCodeLength = 0;
 
-//code array to read to, and token array
+// Code array to read to, and token array
 char rawCode[CODE_BUFFER] = "";
 char cleanCode[CODE_BUFFER] = "";
-struct token_t tokenArray[100];
+struct token_t tokenArray[TOKEN_ARRAY_BUFFER];
 
 
-//functions
+// Prototypes
+
+// Loads input file and stores the information as characters in the rawCode array
 void loadProgramFromFile();
 void outputClean();
 void analyzeCode();
@@ -81,7 +92,8 @@ void printCode();
 void outputTable();
 void outputList();
 
-// this should be about how the code is executed
+
+
 int main() {
     
     
@@ -91,35 +103,35 @@ int main() {
     
     analyzeCode();
     
-    printCode();
     
     return 0;
-    
 }
 
-//should work and read in file
+
 void loadProgramFromFile() {
     
-    FILE* programFile = fopen("input.txt", "r");
+    FILE* programFile = fopen(INPUT_FILE_NAME, "r");
     
-    //check to see the file has loaded
-    if (programFile == NULL) {
-        printf("uhoh ");
-        exit(1);
-    }
-    
-    else {        // If file exists
+    // Check to see the file has loaded
+    if (programFile) {
         
-        // Reads in information from file and stores in CODE structure array
-        char currentCharacter;     // <--- holds code
+        // Reads in information from file
+        char currentCharacter = ' ';     // <--- holds current character
         int i = 0;      //  <--- Counter
-        //   This while loop reads in raw code from a text file and adds it onto the code array, it ends when
+        
+        //   This while loop reads in raw code from a text file and adds it into the rawCode array, it ends when
         //    it reaches the end of the file
-        while (fscanf(programFile, "%c", &currentCharacter) != EOF) {
+        while ( fscanf(programFile, "%c", &currentCharacter) != EOF) {
             rawCode[i] = currentCharacter;
             i++;
         }
+        rawCodeLength = i;
+        
+    } else {
+        printf("Input file not found");
+        exit(1);
     }
+    
 }
 
 
@@ -129,12 +141,12 @@ void outputClean() {
     // Create output file
     FILE* output = fopen("cleaninput.txt", "w");
     
-    char currentChar;
+    char currentChar = ' ';
     int rawIndex = 0;
     int cleanIndex = 0;
     
     
-    while (rawIndex < strlen(rawCode)) {
+    while (rawIndex < rawCodeLength) {
         
         currentChar = rawCode[rawIndex];
         
@@ -149,7 +161,7 @@ void outputClean() {
                     // A comment was found, now we need to find where it stops and change i so that the comment isn't transferred to the cleaned array
                     // Set i to the first character of the comment
                     rawIndex += 2;
-                    currentChar = rawCode[rawIndex];
+                    
                     // Use a nested switch statement, just like the enclosing one except for finding the end comment notation
                     
                     int commentEndFound = FALSE;
@@ -198,29 +210,33 @@ void outputClean() {
 }
 
 
-//need to add more cases
+// The bulk of the input scanning happens here, using a switch statement
 void analyzeCode(){
     
-    //initialize
+    // Initialize
     int last_index = 0;
-    struct token_t token;
     int index = 0;
-    int state = 1;
     int tokenIndex = 0;
     int i;
     
-    for(i=0;i<12;i++){
+    struct token_t token;
+    
+    token.class = -1;
+    for (i = 0; i < 12; i++) {
         token.lexeme[i] = '\0';
     }
-    //loop to read in code
-    while (index<strlen(cleanCode)) {
+    
+    
+    // Loop to read in code
+    while (index < strlen(cleanCode)) {
         
         index = last_index;
-        //getting code from index
+        
+        // Getting code from index
         char ch = cleanCode[index];
         
-        //this allows letters to follow commas
-        if (cleanCode[index-1]==','&&ch!=' '&&ch!='\n'&&ch!='\t') {
+        // This allows letters to follow commas
+        if (cleanCode[index - 1] == ',' && ch != ' ' && ch != '\n' && ch != '\t') {
             tokenArray[tokenIndex]=token;
             tokenIndex++;
             for(i=0;i<12;i++){
@@ -253,7 +269,7 @@ void analyzeCode(){
                 // if ch is == i, then it could be an if statement or a variable
             case 'i':
                 
-                state=2;
+                
                 if (token.lexeme[0]=='i') {
                     token.class=identsym;
                 }
@@ -562,7 +578,7 @@ void analyzeCode(){
                 if (token.lexeme[0]=='b'&& token.lexeme[1]=='e') {
                     token.class = beginsym;
                 }
-                state=4;
+                
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
@@ -570,8 +586,11 @@ void analyzeCode(){
                 
                 
         }
+        
          numberOfTokens = tokenIndex;
     }
+    
+    printCode();
     
 }
 
@@ -592,7 +611,7 @@ void outputTable() {
     for (int i = 0; i < numberOfTokens; i++) {
        fprintf(output, "%s", tokenArray[i].lexeme);
         fprintf(output, "\t");
-        if(strlen(tokenArray[i].lexeme)<6){
+        if (strlen(tokenArray[i].lexeme) < 6){
             fprintf(output, "\t");
         }
         fprintf(output, "%d\n", tokenArray[i].class);
