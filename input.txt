@@ -1,19 +1,8 @@
-const m = 7, n = 85;
-var i,x,y,z,q,r;
-procedure mult;
-    var a, b; /* This i*s n/ot a comment * */
-    begin
-        a := x; b := y; z := 0;
-        while b > 0 do
-        begin
-            if odd x then z := z+a;
-                a := 2*a;
-                b := b/2;
-            end
-        end;
-
-begin
-    x := m;
-    y := n;
-    call mult;
-end.
+potato    	  pot4t0 29  12742 +  - 	* / 	odd =	
+<
+ <= > >= (   )    , ; .  := begin 		end  /* loonggg comentnt
+mistirua */ if  then while 
+ do call  const 
+  var procedure 
+write 
+read 	else /*commnt 		twoo!11))*/
