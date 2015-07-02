@@ -17,12 +17,12 @@
 #define TRUE 1
 #define FALSE 0
 
-static const int CODE_BUFFER = 10000;
-static const int TOKEN_ARRAY_BUFFER = 1000;
+#define CODE_BUFFER = 10000
+#define TOKEN_ARRAY_BUFFER = 1000
 
-static const char INPUT_FILE_NAME[] = "input.txt";
+#define INPUT_FILE_NAME[] = "input.txt"
 
-static const int MAX_LEXEME_LENGTH = 11;
+#define MAX_LEXEME_LENGTH = 11
 
 
 //Identify all lexical conventions
@@ -604,11 +604,11 @@ void printCode() {
 void outputTable() {
     
     FILE* output = fopen("lexemetable.txt", "w");
-    
+    int i = 0;
     // Header
     fprintf(output, "Lexeme\t\tToken Type\n");
     
-    for (int i = 0; i < numberOfTokens; i++) {
+    for (i = 0; i < numberOfTokens; i++) {
        fprintf(output, "%s", tokenArray[i].lexeme);
         fprintf(output, "\t");
         if (strlen(tokenArray[i].lexeme) < 6){
@@ -622,9 +622,9 @@ void outputTable() {
 void outputList() {
     
     FILE* output = fopen("lexemelist.txt", "w");
+    int i = 0;
     
-    
-    for (int i = 0; i < numberOfTokens; i++) {
+    for (i = 0; i < numberOfTokens; i++) {
         
         if (tokenArray[i].class == identsym) {
             fprintf(output, "%d ", tokenArray[i].class);
