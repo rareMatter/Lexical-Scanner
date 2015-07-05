@@ -4,25 +4,12 @@
 //  Alex Chatham
 //  Jesse Spencer, je017812
 
-// BANCH: Efficiency
-// This branch is to improve performance and memory usage
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-
-// Constants
-#define TRUE 1
-#define FALSE 0
-
-#define CODE_BUFFER = 10000
-#define TOKEN_ARRAY_BUFFER = 1000
-
-#define INPUT_FILE_NAME[] = "input.txt"
-
-#define MAX_LEXEME_LENGTH = 11
 
 
 //Identify all lexical conventions
@@ -62,29 +49,29 @@ typedef enum {
     elsesym = 33
 } token_type;
 
-// Token struct
+
+int numberOfTokens = 0;
+
+
+// token struct
 struct token_t{
     int class;
-    char lexeme[MAX_LEXEME_LENGTH];
+    char lexeme[11];
 };
+int i;
+
+#define TRUE 1
+#define FALSE 0
+#define CODE_BUFFER 10000
 
 
-// Global variables
-//
-
-// Used to track the final size of the token array
-int numberOfTokens = 0;
-int rawCodeLength = 0;
-
-// Code array to read to, and token array
-char rawCode[CODE_BUFFER] = "";
-char cleanCode[CODE_BUFFER] = "";
-struct token_t tokenArray[TOKEN_ARRAY_BUFFER];
+//code array to read to, and token array
+char rawCode[CODE_BUFFER];
+char cleanCode[CODE_BUFFER];
+struct token_t tokenArray[100];
 
 
-// Prototypes
-
-// Loads input file and stores the information as characters in the rawCode array
+//functions
 void loadProgramFromFile();
 void outputClean();
 void analyzeCode();
@@ -92,8 +79,7 @@ void printCode();
 void outputTable();
 void outputList();
 
-
-
+// this should be about how the code is executed
 int main() {
     
     
@@ -103,35 +89,35 @@ int main() {
     
     analyzeCode();
     
+    printCode();
     
     return 0;
+    
 }
 
-
+//should work and read in file
 void loadProgramFromFile() {
     
-    FILE* programFile = fopen(INPUT_FILE_NAME, "r");
+    FILE* programFile = fopen("input.txt", "r");
     
-    // Check to see the file has loaded
-    if (programFile) {
-        
-        // Reads in information from file
-        char currentCharacter = ' ';     // <--- holds current character
-        int i = 0;      //  <--- Counter
-        
-        //   This while loop reads in raw code from a text file and adds it into the rawCode array, it ends when
-        //    it reaches the end of the file
-        while ( fscanf(programFile, "%c", &currentCharacter) != EOF) {
-            rawCode[i] = currentCharacter;
-            i++;
-        }
-        rawCodeLength = i;
-        
-    } else {
-        printf("Input file not found");
+    //check to see the file has loaded
+    if (programFile == NULL) {
+        printf("uhoh ");
         exit(1);
     }
     
+    else {        // If file exists
+        
+        // Reads in information from file and stores in CODE structure array
+        char currentCharacter;     // <--- holds code
+        int i = 0;      //  <--- Counter
+        //   This while loop reads in raw code from a text file and adds it onto the code array, it ends when
+        //    it reaches the end of the file
+        while (fscanf(programFile, "%c", &currentCharacter) != EOF) {
+            rawCode[i] = currentCharacter;
+            i++;
+        }
+    }
 }
 
 
@@ -141,12 +127,12 @@ void outputClean() {
     // Create output file
     FILE* output = fopen("cleaninput.txt", "w");
     
-    char currentChar = ' ';
+    char currentChar;
     int rawIndex = 0;
     int cleanIndex = 0;
     
     
-    while (rawIndex < rawCodeLength) {
+    while (rawIndex < strlen(rawCode)) {
         
         currentChar = rawCode[rawIndex];
         
@@ -161,7 +147,7 @@ void outputClean() {
                     // A comment was found, now we need to find where it stops and change i so that the comment isn't transferred to the cleaned array
                     // Set i to the first character of the comment
                     rawIndex += 2;
-                    
+                    currentChar = rawCode[rawIndex];
                     // Use a nested switch statement, just like the enclosing one except for finding the end comment notation
                     
                     int commentEndFound = FALSE;
@@ -210,33 +196,32 @@ void outputClean() {
 }
 
 
-// The bulk of the input scanning happens here, using a switch statement
+//need to add more cases
 void analyzeCode(){
     
-    // Initialize
+    //initialize
     int last_index = 0;
+    struct token_t token;
     int index = 0;
+    int state = 1;
     int tokenIndex = 0;
     int i;
     
-    struct token_t token;
-    
-    token.class = -1;
-    for (i = 0; i < 12; i++) {
+    for(i=0;i<12;i++){
         token.lexeme[i] = '\0';
     }
-    
-    
-    // Loop to read in code
-    while (index < strlen(cleanCode)) {
+    //loop to read in code
+    while (index<strlen(cleanCode)) {
         
         index = last_index;
-        
-        // Getting code from index
+        //getting code from index
         char ch = cleanCode[index];
         
-        // This allows letters to follow commas
-        if (cleanCode[index - 1] == ',' && ch != ' ' && ch != '\n' && ch != '\t') {
+        
+        
+        //back up security to protect against breaks
+                        //this allows letters to follow commas
+        if (cleanCode[index-1]==','&&ch!=' '&&ch!='\n'&&ch!='\t') {
             tokenArray[tokenIndex]=token;
             tokenIndex++;
             for(i=0;i<12;i++){
@@ -253,27 +238,18 @@ void analyzeCode(){
             }
         }
         
-        if (cleanCode[index-1]=='/'||cleanCode[index-1]=='+'||cleanCode[index-1]=='-'||cleanCode[index-1]=='='||cleanCode[index-1]=='*') {
-            if (ch!=' ') {
-                tokenArray[tokenIndex]=token;
-                tokenIndex++;
-                for(i=0;i<12;i++){
-                    token.lexeme[i] = '\0';
-                }
-            }
-        }
-       
+        
         //switch function to create tokens from code array
         switch(ch) {
                 
                 // if ch is == i, then it could be an if statement or a variable
             case 'i':
                 
-                
+                state=2;
+                token.lexeme[strlen(token.lexeme)]=ch;
                 if (token.lexeme[0]=='i') {
                     token.class=identsym;
                 }
-                token.lexeme[strlen(token.lexeme)]=ch;
                 if (cleanCode[index + 1] == 'f') {
                     token.lexeme[strlen(token.lexeme)]=cleanCode[index + 1];
                     token.class = ifsym;
@@ -349,17 +325,21 @@ void analyzeCode(){
                 //if there is a space new line or tab, we know that the last token has ended and the new token begins after this character
                 // Whitespace case
             case ' ' :
+            case '\r':
             case '\n':
             case '\t':
-                if (cleanCode[index-1]==' '||cleanCode[index-1]=='\n') {
+                if (cleanCode[index-1]==' '||cleanCode[index-1]=='\n'||cleanCode[index-1]=='\t'||cleanCode[index-1]=='\r') {
                     last_index = index +1;
                     break;
                     
                 }
+                
+                    
+                
                 tokenArray[tokenIndex]=token;
                 tokenIndex++;
                 for(i=0;i<12;i++){
-                token.lexeme[i] = '\0';
+                    token.lexeme[i] = '\0';
                 }
                 
                 last_index = index+1;
@@ -378,13 +358,6 @@ void analyzeCode(){
                 last_index = index+1;
                 break;
             case '+':
-                if (cleanCode[index-1]!=' ') {
-                    tokenArray[tokenIndex]=token;
-                    tokenIndex++;
-                    for(i=0;i<12;i++){
-                        token.lexeme[i] = '\0';
-                    }
-                }
                 token.class = plussym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -398,7 +371,7 @@ void analyzeCode(){
                 last_index = index + 1;
                 break;
             case '-':
-                if (cleanCode[index-1]!=' ') {
+                if (cleanCode[index-1]!=(' '|'\n'|'\t')) {
                     tokenArray[tokenIndex]=token;
                     tokenIndex++;
                     for(i=0;i<12;i++){
@@ -514,7 +487,7 @@ void analyzeCode(){
                 if (cleanCode[index-1]==' '||cleanCode[index-1]==',') {
                     token.class = identsym;
                 }
-                if (cleanCode[index + 1] == 'e'&& cleanCode[index+2]=='a') {
+                if (cleanCode[index + 1] == 'e'&&cleanCode[index+2]=='a') {
                     token.lexeme[strlen(token.lexeme)] = cleanCode[index+1];
                     if (cleanCode[index + 2] == 'a') {
                         token.lexeme[strlen(token.lexeme)] = cleanCode[index+2];
@@ -547,7 +520,7 @@ void analyzeCode(){
             case 'n':
                 token.lexeme[strlen(token.lexeme)] = ch;
                 if (token.lexeme[0]=='n') {
-                token.class = identsym;
+                    token.class = identsym;
                 }
                 if (cleanCode[index + 1]== 'u'){
                     token.class = nulsym;
@@ -566,7 +539,7 @@ void analyzeCode(){
                 if(token.class == 0 ){
                     token.class = identsym;
                 }
-                if(isdigit(ch)==TRUE){
+                if(isdigit(ch)==TRUE&&isdigit(cleanCode[index-1])==TRUE){
                     token.class = numbersym;
                 }
                 if (isalpha(ch)==TRUE &&isalpha(cleanCode[index-1])==FALSE) {
@@ -578,7 +551,7 @@ void analyzeCode(){
                 if (token.lexeme[0]=='b'&& token.lexeme[1]=='e') {
                     token.class = beginsym;
                 }
-                
+                state=4;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
@@ -586,11 +559,8 @@ void analyzeCode(){
                 
                 
         }
-        
-         numberOfTokens = tokenIndex;
+        numberOfTokens = tokenIndex;
     }
-    
-    printCode();
     
 }
 
@@ -604,14 +574,14 @@ void printCode() {
 void outputTable() {
     
     FILE* output = fopen("lexemetable.txt", "w");
-    int i = 0;
+    
     // Header
     fprintf(output, "Lexeme\t\tToken Type\n");
     
     for (i = 0; i < numberOfTokens; i++) {
-       fprintf(output, "%s", tokenArray[i].lexeme);
+        fprintf(output, "%s", tokenArray[i].lexeme);
         fprintf(output, "\t");
-        if (strlen(tokenArray[i].lexeme) < 6){
+        if(strlen(tokenArray[i].lexeme)<7){
             fprintf(output, "\t");
         }
         fprintf(output, "%d\n", tokenArray[i].class);
@@ -622,16 +592,16 @@ void outputTable() {
 void outputList() {
     
     FILE* output = fopen("lexemelist.txt", "w");
-    int i = 0;
+    
     
     for (i = 0; i < numberOfTokens; i++) {
         
-        if (tokenArray[i].class == identsym) {
+        if (tokenArray[i].class == identsym && tokenArray[i].lexeme[0]!='\0') {
             fprintf(output, "%d ", tokenArray[i].class);
             fprintf(output, "%s ", tokenArray[i].lexeme);
         }
         
-        else
+        else if(tokenArray[i].lexeme[0]!='\0' )
             fprintf(output, "%d ", tokenArray[i].class);
     }
     
