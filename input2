@@ -1,0 +1,26 @@
+/* comment detection and removal */
+
+const z = 15;
+var a, b, c;
+procedure wappy;
+begin
+	a := 3;
+	b := 10;
+	if a < b then c := a + b else c := 1;
+	while a <= b do
+		begin
+			a := a + 1;
+			a := a - 1;
+			a := a * 1;
+			a := a / 1;
+		end;
+	if odd a then c := 2;
+	if a <> b then c := 3;
+	if a > b then c := (1 + 3);
+	if a >= b then c := 1;
+	c := a;
+/* comment detk ti rmva lr ghrr */
+
+	read a;
+	write a;
+end.
