@@ -571,7 +571,7 @@ void analyzeCode(){
                 if(token.class == 0 ){
                     token.class = identsym;
                 }
-                if(isdigit(ch)==TRUE&&isdigit(cleanCode[index-1])==TRUE){
+                if(isdigit(ch)==TRUE&&isalpha(cleanCode[index-1])!=TRUE){
                     token.class = numbersym;
                 }
                 if (isalpha(ch)==TRUE &&isalpha(cleanCode[index-1])==FALSE) {
