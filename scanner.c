@@ -1,3 +1,4 @@
+
 //  Lexical Analyzer
 //
 //  Created by:
@@ -237,7 +238,54 @@ void analyzeCode(){
                 token.lexeme[i] = '\0';
             }
         }
-        
+        //this allows for ; right after identifiers
+        if (ch==';'&&cleanCode[index-1]!=' ') {
+            tokenArray[tokenIndex]=token;
+            tokenIndex++;
+            for(i=0;i<12;i++){
+                token.lexeme[i] = '\0';
+            }
+        }
+        //this allows for , right after identifiers
+        if (ch==','&&cleanCode[index-1]!=' ') {
+            tokenArray[tokenIndex]=token;
+            tokenIndex++;
+            for(i=0;i<12;i++){
+                token.lexeme[i] = '\0';
+            }
+        }
+
+        //this allows for ( right after identifiers
+        if (ch=='('&&cleanCode[index-1]!=' ') {
+            tokenArray[tokenIndex]=token;
+            tokenIndex++;
+            for(i=0;i<12;i++){
+                token.lexeme[i] = '\0';
+            }
+        }
+        //this allows for ( right before identifiers
+        if (ch=='('&&cleanCode[index+1]!=' ') {
+            token.lexeme[strlen(token.lexeme)]=ch;
+            tokenArray[tokenIndex]=token;
+            tokenIndex++;
+            for(i=0;i<12;i++){
+                token.lexeme[i] = '\0';
+            }
+            index++;
+            last_index++;
+            ch = cleanCode[index];
+        }
+
+        //this allows for ) right after identifiers
+        if (ch==')'&&cleanCode[index-1]!=' ') {
+            tokenArray[tokenIndex]=token;
+            tokenIndex++;
+            for(i=0;i<12;i++){
+                token.lexeme[i] = '\0';
+            }
+        }
+
+
         
         //switch function to create tokens from code array
         switch(ch) {
@@ -335,12 +383,14 @@ void analyzeCode(){
                 }
                 
                     
+                if (token.lexeme[0]!='\0') {
+                    
                 
                 tokenArray[tokenIndex]=token;
                 tokenIndex++;
                 for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
-                }
+                }}
                 
                 last_index = index+1;
                 break;
@@ -371,25 +421,11 @@ void analyzeCode(){
                 last_index = index + 1;
                 break;
             case '-':
-                if (cleanCode[index-1]!=(' '|'\n'|'\t')) {
-                    tokenArray[tokenIndex]=token;
-                    tokenIndex++;
-                    for(i=0;i<12;i++){
-                        token.lexeme[i] = '\0';
-                    }
-                }
                 token.class = minussym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case '*':
-                if (cleanCode[index-1]!=' ') {
-                    tokenArray[tokenIndex]=token;
-                    tokenIndex++;
-                    for(i=0;i<12;i++){
-                        token.lexeme[i] = '\0';
-                    }
-                }
                 token.class = multsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -407,45 +443,37 @@ void analyzeCode(){
             case ':':
                 token.class = becomessym;
                 token.lexeme[strlen(token.lexeme)]=ch;
-                //the next input should be an = sign
-                token.lexeme[strlen(token.lexeme)]=cleanCode[index+1];
-                //increment the index by two to incorperate the : and the =
-                last_index = index + 2;
+                last_index = index + 1;
                 break;
             case ',':
                 //since there is not a space before commas we need to end the last token
-                tokenArray[tokenIndex]=token;
+               /* tokenArray[tokenIndex]=token;
                 for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
                 tokenIndex++;
-                token=tokenArray[tokenIndex];
+                token=tokenArray[tokenIndex];*/
                 token.class = commasym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
                 break;
             case '.':
                 //there is not a space before periods, periods also end the file
-                tokenArray[tokenIndex]=token;
+                /*tokenArray[tokenIndex]=token;
                 for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
-                tokenIndex++;
+                tokenIndex++;*/
                 token.class = periodsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
-                tokenArray[tokenIndex]=token;
-                for(i=0;i<12;i++){
-                    token.lexeme[i] = '\0';
-                }
-                tokenIndex++;
                 last_index = index+1;
                 break;
             case ';':
-                tokenArray[tokenIndex]=token;
+               /* tokenArray[tokenIndex]=token;
                 for(i=0;i<12;i++){
                     token.lexeme[i] = '\0';
                 }
-                tokenIndex++;
+                tokenIndex++;*/
                 token.class = semicolonsym;
                 token.lexeme[strlen(token.lexeme)]=ch;
                 last_index = index+1;
@@ -471,6 +499,9 @@ void analyzeCode(){
                         last_index = index + 3;
                         break;
                     }
+                }
+                if (cleanCode[index-1]=='d') {
+                    token.class = dosym;
                 }
                 last_index = index + 1;
                 break;
@@ -607,5 +638,3 @@ void outputList() {
     
     
 }
-
-
