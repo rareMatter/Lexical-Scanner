@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-potato    	  pot4t0 29  12742 +  - 	* / 	odd =	
+potato    	  pot4t0 29  12742 +  - 	* / 	odd =
 <
  <= > >= (   )    , ; .  := begin 		end  /* loonggg comentnt
 mistirua */ if  then while 
@@ -16,4 +15,3 @@ do call  const
 var procedure
 write
 read 	else /*commnt 		twoo!11))*/
->>>>>>> Stashed changes
